@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trailhead — Hero Slider Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  :root{
+    --forest: #1B2E1F;
+    --forest-deep: #102013;
+    --sand: #E8DFC8;
+    --sienna: #C1652F;
+    --off-white: #F5F1E8;
+    --charcoal: #232323;
+    --line: rgba(245,241,232,0.16);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:var(--forest-deep);color:var(--off-white);font-family:'Inter',sans-serif;overflow-x:hidden;}
+  ::selection{background:var(--sienna);color:var(--off-white);}
+
+  .lab-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px clamp(20px,4vw,48px);
+    border-bottom:1px solid var(--line);
+    background:var(--forest-deep);
+    position:relative;z-index:20;
+  }
+  .brand{
+    font-family:'Fraunces',serif;font-size:20px;letter-spacing:0.02em;
+    display:flex;align-items:center;gap:10px;
+  }
+  .brand .mark{
+    width:9px;height:9px;border-radius:50%;background:var(--sienna);
+    box-shadow:0 0 0 4px rgba(193,101,47,0.18);
+  }
+  .lab-sub{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;
+    text-transform:uppercase;color:rgba(245,241,232,0.5);
+  }
+
+  .engine-tabs{
+    display:flex;gap:2px;padding:14px clamp(20px,4vw,48px) 0;
+    background:var(--forest-deep);position:relative;z-index:20;
+    flex-wrap:wrap;
+  }
+  .engine-tab{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;
+    color:rgba(245,241,232,0.55);background:transparent;border:none;
+    padding:10px 16px 12px;cursor:pointer;position:relative;
+    transition:color .25s ease;
+    display:flex;align-items:center;
+  }
+  .engine-tab:nth-child(3) {display:none}
+  .tab-thumb{
+    width:30px;height:22px;display:inline-block;background-size:cover;
+    background-position:center;margin-right:10px;border:1px solid rgba(245,241,232,0.22);
+    opacity:0.6;transition:opacity .25s ease, border-color .25s ease;flex-shrink:0;
+  }
+  .engine-tab.active .tab-thumb{opacity:1;border-color:var(--sienna);}
+  .engine-tab .num{color:rgba(245,241,232,0.3);margin-right:8px;}
+  .engine-tab:hover{color:var(--off-white);}
+  .engine-tab.active{color:var(--off-white);}
+  .engine-tab.active .num{color:var(--sienna);}
+  .engine-tab::after{
+    content:'';position:absolute;left:16px;right:16px;bottom:0;height:2px;
+    background:var(--sienna);transform:scaleX(0);transform-origin:left;
+    transition:transform .3s ease;
+  }
+  .engine-tab.active::after{transform:scaleX(1);}
+
+  .stage{
+    position:relative;width:100%;height:min(78vh,720px);min-height:460px;
+    overflow:hidden;background:var(--forest);border-bottom:1px solid var(--line);
+  }
+
+  .progress-track{
+    position:absolute;top:0;left:0;right:0;height:3px;
+    background:rgba(245,241,232,0.15);z-index:8;
+  }
+  .progress-fill{
+    height:100%;width:100%;background:var(--sienna);
+    transform:scaleX(0);transform-origin:left;
+  }
+  .split-mode .progress-track{background:rgba(35,35,35,0.12);}
+
+  .slide{
+    position:absolute;inset:0;
+    display:flex;align-items:flex-end;
+    visibility:hidden;
+  }
+  .slide.is-visible{visibility:visible;}
+  .slide-bg{
+    position:absolute;inset:0;background-size:cover;background-position:center;
+  }
+  .slide-bg::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(16,32,19,0.15) 0%, rgba(16,32,19,0.75) 100%);
+  }
+  .slide-content{
+    position:relative;z-index:2;padding:clamp(28px,5vw,64px);
+    max-width:640px;
+  }
+  .slide-eyebrow{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--sand);opacity:0.85;margin-bottom:14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .slide-eyebrow .dash{width:24px;height:1px;background:var(--sienna);}
+  .slide-title{
+    font-family:'Fraunces',serif;font-weight:500;font-style:italic;
+    font-size:clamp(34px,5.5vw,64px);line-height:1.05;color:var(--off-white);
+    margin-bottom:16px;
+  }
+  .slide-title .word-mask{overflow:hidden;display:inline-block;vertical-align:top;}
+  .slide-title .word{display:inline-block;}
+  .slide-title .letter{opacity:0;display:inline-block;}
+  .slide-title .cursor{
+    display:inline-block;width:3px;height:0.85em;background:var(--sienna);
+    margin-left:4px;vertical-align:-0.08em;animation:blinkCursor 0.9s steps(1) infinite;
+  }
+  @keyframes blinkCursor{50%{opacity:0;}}
+  .slide-desc{
+    font-size:15px;line-height:1.6;color:rgba(245,241,232,0.82);
+    max-width:440px;margin-bottom:26px;
+  }
+  .slide-cta{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;
+    text-transform:uppercase;color:var(--forest-deep);background:var(--sand);
+    border:none;padding:14px 26px;cursor:pointer;
+    transition:background .2s ease, transform .2s ease;
+  }
+  .slide-cta:hover{background:var(--off-white);transform:translateY(-2px);}
+
+  .stage.split-mode{background:var(--off-white);}
+  .split-track{position:absolute;inset:0;display:flex;}
+  .split-half{position:relative;flex:1;overflow:hidden;}
+  .split-half.text-side{
+    background:var(--off-white);color:var(--charcoal);
+    display:flex;align-items:center;padding:clamp(24px,4vw,56px);
+  }
+  .split-half.text-side .slide-title,.split-half.text-side .slide-desc{color:var(--charcoal);}
+  .split-half.text-side .slide-eyebrow{color:var(--sienna);}
+  .split-half.text-side .slide-cta{background:var(--charcoal);color:var(--off-white);}
+  .split-half.image-side{background-size:cover;background-position:center;}
+
+  .stage-controls{
+    position:absolute;left:0;right:0;bottom:0;z-index:5;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 clamp(20px,4vw,48px) 22px;
+  }
+  .trail{display:flex;align-items:center;gap:10px;}
+  .trail-marker{
+    position:relative;width:34px;height:3px;background:rgba(245,241,232,0.25);
+    cursor:pointer;overflow:hidden;
+  }
+  .trail-marker .fill{
+    position:absolute;inset:0;background:var(--sienna);transform:scaleX(0);
+    transform-origin:left;
+  }
+  .trail-marker.active .fill{transform:scaleX(1);}
+
+  .arrows{display:flex;gap:10px;align-items:center;}
+  .arrow-btn{
+    width:42px;height:42px;border-radius:50%;border:1px solid rgba(245,241,232,0.35);
+    background:rgba(16,32,19,0.35);color:var(--off-white);
+    display:flex;align-items:center;justify-content:center;cursor:pointer;
+    transition:border-color .2s ease, background .2s ease;
+  }
+  .arrow-btn:hover{border-color:var(--sienna);background:rgba(193,101,47,0.25);}
+  .arrow-btn svg{width:16px;height:16px;}
+  .split-mode .arrow-btn{border-color:rgba(35,35,35,0.3);color:var(--charcoal);background:rgba(232,223,200,0.5);}
+  .split-mode .trail-marker{background:rgba(35,35,35,0.18);}
+
+  .next-round{
+    width:74px;height:74px;border-radius:50%;border:2px solid var(--off-white);
+    background-size:cover;background-position:center;position:relative;
+    cursor:pointer;overflow:hidden;flex-shrink:0;
+    box-shadow:0 6px 20px rgba(0,0,0,0.35);
+    transition:transform .25s ease;
+  }
+  .next-round:hover{transform:scale(1.06);}
+  .next-round .veil{
+    position:absolute;inset:0;background:rgba(16,32,19,0.4);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.06em;
+    text-transform:uppercase;color:var(--off-white);
+    transition:background .25s ease;
+  }
+  .next-round:hover .veil{background:rgba(16,32,19,0.15);}
+  .next-round-wrap{display:flex;align-items:center;gap:12px;}
+  .next-round-label{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;
+    text-transform:uppercase;color:rgba(245,241,232,0.65);
+  }
+
+  /* ---------- Premium auto layout ---------- */
+  .stage.auto-mode .stage-controls{display:none;}
+  .auto-slide{position:absolute;inset:0;}
+  .auto-slide .slide-bg{position:absolute;inset:0;background-size:cover;background-position:center;}
+  .auto-slide .slide-bg::after{
+    content:'';position:absolute;inset:0;
+    background:
+      linear-gradient(90deg, rgba(16,32,19,0.6) 0%, rgba(16,32,19,0.1) 32%, rgba(16,32,19,0.05) 68%, rgba(16,32,19,0.55) 100%),
+      linear-gradient(180deg, rgba(16,32,19,0.05) 0%, rgba(16,32,19,0.45) 100%);
+  }
+  .auto-layout{position:relative;z-index:2;height:100%;display:flex;}
+  .auto-left{
+    width:clamp(220px,26%,340px);display:flex;flex-direction:column;justify-content:center;
+    padding:0 clamp(20px,3vw,40px);gap:14px;flex-shrink:0;
+  }
+  .auto-spec{
+    font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.05em;
+    color:var(--sand);opacity:0.85;
+  }
+  .auto-center{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;padding:0 16px;
+  }
+  .auto-title-wrap{position:relative;overflow:visible;text-align:center;}
+  .auto-title{
+    font-family:'Inter',sans-serif;font-weight:700;text-transform:uppercase;
+    letter-spacing:0.06em;font-size:108px;line-height:0.95;
+    color:var(--off-white);white-space:nowrap;
+    will-change:clip-path;
+  }
+  .auto-right{
+    width:clamp(90px,9%,130px);display:flex;flex-direction:column;justify-content:center;
+    gap:14px;padding:24px 16px;border-left:1px solid rgba(245,241,232,0.12);flex-shrink:0;
+  }
+  .auto-thumb{
+    position:relative;width:100%;aspect-ratio:4/3;background-size:cover;background-position:center;
+    cursor:pointer;border:1px solid rgba(245,241,232,0.25);opacity:0.5;
+    transition:opacity .25s ease, border-color .25s ease;
+  }
+  .auto-thumb:hover{opacity:0.85;}
+  .auto-thumb.active{opacity:1;border-color:var(--sienna);}
+  .auto-thumb-label{
+    position:absolute;left:0;right:0;bottom:0;padding:4px 5px;
+    font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.03em;
+    background:rgba(16,32,19,0.7);color:var(--off-white);text-transform:uppercase;
+  }
+  @media(max-width:760px){
+    .auto-left{width:auto;position:absolute;left:16px;bottom:16px;top:auto;padding:0;}
+    .auto-right{width:64px;}
+    .auto-title{font-size:clamp(36px,14vw,80px);}
+  }
+
+  /* ---------- Card stack swipe ---------- */
+  .stack-layout{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+  .stack-hint{
+    position:absolute;top:20px;right:clamp(20px,4vw,48px);z-index:9;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.05em;
+    color:rgba(245,241,232,0.55);text-transform:uppercase;
+    display:flex;align-items:center;gap:8px;pointer-events:none;
+  }
+  .stack-hint .dot{width:5px;height:5px;border-radius:50%;background:var(--sienna);}
+  .stack-card{
+    position:absolute;width:min(600px,74%);height:80%;border-radius:20px;overflow:hidden;
+    box-shadow:0 30px 70px rgba(0,0,0,0.5);cursor:pointer;
+    background-size:cover;background-position:center;
+    display:flex;align-items:flex-end;
+  }
+  .stack-card::after{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(16,32,19,0.05) 0%, rgba(16,32,19,0.82) 100%);
+  }
+  .stack-card .slide-content{position:relative;z-index:2;padding:clamp(24px,4vw,44px);max-width:520px;}
+
+  .notes{
+    padding:clamp(24px,4vw,48px);border-bottom:1px solid var(--line);
+    display:grid;grid-template-columns:1fr;gap:18px;
+  }
+  @media(min-width:800px){.notes{grid-template-columns:1.1fr 0.9fr;}}
+  .notes h3{
+    font-family:'Fraunces',serif;font-weight:400;font-size:22px;margin-bottom:10px;
+  }
+  .notes p{font-size:14px;line-height:1.7;color:rgba(245,241,232,0.75);max-width:560px;}
+  .notes code{
+    font-family:'JetBrains Mono',monospace;background:rgba(245,241,232,0.08);
+    padding:2px 6px;border-radius:3px;font-size:12.5px;color:var(--sand);
+  }
+  .tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+  .tag{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.04em;
+    padding:6px 10px;border:1px solid var(--line);color:rgba(245,241,232,0.7);
+  }
+  pre.snippet{
+    background:var(--forest);border:1px solid var(--line);padding:16px 18px;
+    font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;
+    color:var(--sand);overflow-x:auto;white-space:pre;
+  }
+  footer{
+    padding:20px clamp(20px,4vw,48px) 32px;
+    font-family:'JetBrains Mono',monospace;font-size:11px;color:rgba(245,241,232,0.4);
+  }
+</style>
+</head>
+<body>
+<nav class="engine-tabs" id="engineTabs"></nav>
+
+<section class="stage" id="stage">
+  <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="stage-controls">
+    <div class="trail" id="trail"></div>
+    <div class="arrows" id="controlsArea"></div>
+  </div>
+</section>
+
+<section class="notes" id="notesPanel">
+  <div>
+    <h3 id="notesTitle">Fade / Ken Burns</h3>
+    <p id="notesBody"></p>
+    <div class="tag-row" id="notesTags"></div>
+  </div>
+  <pre class="snippet" id="notesSnippet"></pre>
+</section>
+
+<footer>Built with HTML · CSS · vanilla JS · GSAP 3 — no framework, no bundler.</footer>
+
+<script>
+const IMAGES = [
+  "background-1.png",
+  "background-02.png",
+  "background-03.png",
+  "background-04.png"
+];
+
+const KENBURNS_IMAGES = [
+  "background-1.png",
+  "background-02.png",
+  "background-03.png",
+  "background-04.png"
+];
+
+const CAR_IMAGES = [
+  "smart-wearable.png",
+  "smart-home.png",
+  "smart-monitor.png",
+  "smart-farm.png"
+];
+
+const CAR_CONTENT = [
+  { eyebrow: "Smart Device", title: "WEARABLE", spec: "0–100 km/h in 3.4s", desc: "Carbon-shell coupe built for the mountain road, not the showroom floor.", cta: "Configure" },
+  { eyebrow: "Smart Sensor", title: "SMARTHOME", spec: "612 hp · rear-wheel drive", desc: "Open-top, naturally aspirated, tuned for the sound as much as the speed.", cta: "Configure" },
+  { eyebrow: "Connected Device", title: "MONITOR", spec: "Adaptive air suspension", desc: "Grand touring reworked — four seats, one purpose.", cta: "Configure" },
+  { eyebrow: "Smart Agriculture", title: "SMARTFARM", spec: "480km range · silent launch", desc: "Electric performance without the performance theatre.", cta: "Configure" }
+];
+
+const CONTENT = [
+  { eyebrow: "Electronic Product Engineering", title: "Engineering Smart Electronic Products", desc: "We design custom electronics, embedded systems, wireless connectivity, and IoT solutions that transform ideas into market-ready products..", cta: "Start Your Project" },
+  { eyebrow: "Connected Product Development", title: "Build Connected Electronic Products", desc: "From hardware design and embedded firmware to smart connectivity, we engineer reliable products for modern businesses.", cta: "Talk to our Experts" },
+  { eyebrow: "End to End Engineering", title: "Complete Product Engineering Services", desc: "Helping startups, OEMs, and enterprises develop intelligent electronic products with end-to-end engineering expertise.", cta: "Let's Build Together" },
+  { eyebrow: "Embedded Systems and Connectivity", title: "Design Smarter Connected Devices", desc: "Complete electronic product development including PCB design, embedded software, wireless communication, and manufacturing support.", cta: "Get Started" }
+];
+
+const ENGINES = [
+  { key: "fade",       label: "Fade / Ken Burns" },
+  { key: "stack",      label: "Card Stack Swipe" },
+  { key: "kenburns",   label: "Ken Burns Only" },
+  { key: "split",      label: "Split-Screen" },
+  { key: "textreveal", label: "Text Reveal + Round Next" },
+  { key: "auto",       label: "Premium Auto Layout" }
+];
+
+const ENGINE_NOTES = {
+  fade: {
+    title: "Fade / Ken Burns",
+    body: `Slides crossfade using GSAP's <code>gsap.to(opacity)</code> tween while a slow background-scale animation runs underneath — the two effects are independent, which is why this reads as the "premium" combo on hospitality and agency sites.`,
+    tags: ["GSAP timeline", "opacity crossfade", "6s scale(1→1.12)"],
+    snippet: `gsap.to(currentSlide, { opacity: 0, duration: 0.9 });
+gsap.to(nextSlide,    { opacity: 1, duration: 0.9 });
+gsap.to(nextSlide.querySelector('.slide-bg'),
+  { scale: 1.12, duration: 6, ease: 'none' });`
+  },
+  stack: {
+    title: "Card Stack Swipe",
+    body: `Instead of one background rotating, four cards sit fanned behind each other like a physical deck. Tap the front card (or use the arrows) and it flies off to the right while the rest of the stack shifts forward one position — the card that flew off reappears silently at the back, fully hidden, ready for its next turn. Nothing here is a "background slider" anymore; it's an object you're handling.`,
+    tags: ["fanned depth stack", "fly-off + re-insert", "tap-front-card-to-advance"],
+    snippet: `// card that was on top flies away, then jumps to the back
+gsap.timeline()
+  .to(frontCard, { x: 620, rotate: 20, opacity: 0, duration: 0.45 })
+  .set(frontCard, { ...backOfStackTransform, opacity: 0 })
+  .to(frontCard, { opacity: 0, duration: 0.4 });
+// everyone else just steps forward one depth
+gsap.to(otherCard, { ...nextDepthTransform, duration: 0.5 });`
+  },
+  kenburns: {
+    title: "Ken Burns Only",
+    body: `No transition trick — one slide is visible at a time and the background just slowly zooms and drifts. The title now types itself in letter by letter with a blinking cursor, rather than just fading as a block, which draws the eye before the zoom has time to feel slow.`,
+    tags: ["single active slide", "scale + translate drift", "letter-stagger typewriter"],
+    snippet: `gsap.fromTo(bg,
+  { scale: 1, x: 0 },
+  { scale: 1.15, x: -20, duration: 12, ease: 'sine.out' }
+);
+gsap.to(letters, { opacity: 1, duration: 0.04,
+  stagger: 0.035, ease: 'none' }); // typed reveal`
+  },
+  split: {
+    title: "Split-Screen",
+    body: `The hero is divided into two panes — static text on the left, a rotating image on the right. Only the image side animates, which keeps the layout calm and is why this pattern is common on fashion and product sites.`,
+    tags: ["2-column layout", "image-only rotation", "fade on image side"],
+    snippet: `// text side never re-renders
+gsap.to(imageSide.querySelector('.slide-bg'),
+  { opacity: 0, duration: 0.5, onComplete: swapImage });`
+  },
+  textreveal: {
+    title: "Text Reveal + Round Next Preview",
+    body: `Each word is wrapped in an overflow-hidden mask and slides up on a stagger, instead of the whole block just fading in. Navigation drops the arrow icons entirely — the "next" control is a round thumbnail of the upcoming slide itself, so the person can see what they're about to click before they click it.`,
+    tags: ["word-mask stagger", "no prev/next icons", "circular image preview"],
+    snippet: `gsap.fromTo(words,
+  { yPercent: 110 },
+  { yPercent: 0, duration: 0.7, stagger: 0.05, ease: 'power3.out' }
+);
+nextRoundBtn.style.backgroundImage = \`url(\${IMAGES[nextIndex]})\`;`
+  },
+  auto: {
+    title: "Premium Auto Layout",
+    body: `The layout automotive brands use: a fixed 3-column frame — small spec block pinned left, a huge model name centered, a vertical thumbnail rail pinned right. The background snaps in with a scale-down on entry, then keeps a slow continuous drift the whole time it's on screen. The title itself is clip-path'd down to a thin horizontal sliver, then the clip expands outward to the full letterform — no overlay bars, no color to get wrong, the reveal is the text's own edge.`,
+    tags: ["3-column fixed frame", "clip-path reveal", "image scale-in + drift", "click-through thumbnail rail"],
+    snippet: `gsap.set(title, { clipPath: 'inset(50% 0% 50% 0%)' });
+gsap.timeline()
+  .to(bg,    { scale: 1, duration: 1.6, ease: 'power2.out' }, 0)
+  .to(title, { clipPath: 'inset(0% 0% 0% 0%)',
+               scale: 1, duration: 0.9, ease: 'power3.inOut' }, 0.15);`
+  }
+};
+
+let currentEngine = "fade";
+let currentIndex = 0;
+let autoplayTimer = null;
+const AUTOPLAY_MS = 5500;
+const stage = document.getElementById("stage");
+const trail = document.getElementById("trail");
+const controlsArea = document.getElementById("controlsArea");
+const progressFill = document.getElementById("progressFill");
+
+function buildTabs(){
+  const nav = document.getElementById("engineTabs");
+  nav.innerHTML = ENGINES.map((e, i) => `
+    <button class="engine-tab${e.key===currentEngine?' active':''}" data-engine="${e.key}">
+      <span class="tab-thumb" style="background-image:url('${e.key === "auto" ? CAR_IMAGES[0] : IMAGES[i % IMAGES.length]}')"></span>
+      <span class="num">0${i+1}</span>${e.label}
+    </button>
+  `).join("");
+}
+
+function buildTrail(){
+  trail.innerHTML = "";
+  CONTENT.forEach((_, i) => {
+    const m = document.createElement("div");
+    m.className = "trail-marker" + (i === currentIndex ? " active" : "");
+    m.innerHTML = '<div class="fill"></div>';
+    m.addEventListener("click", () => { goTo(i); resetAutoplay(); });
+    trail.appendChild(m);
+  });
+}
+function updateTrail(){
+  [...trail.children].forEach((m, i) => m.classList.toggle("active", i === currentIndex));
+}
+
+function wrapWords(title){
+  return title.split(" ").map(w => `<span class="word-mask"><span class="word">${w}&nbsp;</span></span>`).join("");
+}
+
+function wrapLetters(title){
+  const letters = title.split("").map(ch => ch === " " ? " " : `<span class="letter">${ch}</span>`).join("");
+  return letters + '<span class="cursor"></span>';
+}
+
+function renderControls(){
+  if(currentEngine === "textreveal"){
+    const nextIndex = (currentIndex + 1) % CONTENT.length;
+    controlsArea.innerHTML = `
+      <div class="next-round-wrap">
+        <span class="next-round-label">Next stop</span>
+        <div class="next-round" id="nextRoundBtn" style="background-image:url('${IMAGES[nextIndex]}')">
+          <div class="veil">Next</div>
+        </div>
+      </div>
+    `;
+    document.getElementById("nextRoundBtn").addEventListener("click", () => { goTo(currentIndex + 1); resetAutoplay(); });
+  } else {
+    controlsArea.innerHTML = `
+      <button class="arrow-btn" id="prevBtn" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="arrow-btn" id="nextBtn" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    `;
+    document.getElementById("nextBtn").addEventListener("click", () => { goTo(currentIndex + 1); resetAutoplay(); });
+    document.getElementById("prevBtn").addEventListener("click", () => { goTo(currentIndex - 1); resetAutoplay(); });
+  }
+}
+
+function renderStage(){
+  stage.classList.toggle("split-mode", currentEngine === "split");
+  stage.classList.toggle("auto-mode", currentEngine === "auto");
+  stage.querySelectorAll(".slide, .split-track, .auto-slide, .stack-layout, .stack-hint").forEach(el => el.remove());
+
+  if(currentEngine === "auto"){
+    const wrap = renderAutoSlide(currentIndex);
+    stage.insertBefore(wrap, stage.querySelector(".stage-controls"));
+    attachAutoRailEvents(wrap);
+    playAutoReveal(wrap);
+  } else if(currentEngine === "stack"){
+    const hint = document.createElement("div");
+    hint.className = "stack-hint";
+    hint.innerHTML = '<span class="dot"></span>Tap the front card';
+    stage.insertBefore(hint, stage.querySelector(".stage-controls"));
+    const wrap = document.createElement("div");
+    wrap.className = "stack-layout";
+    CONTENT.forEach((c, i) => {
+      const card = document.createElement("div");
+      card.className = "stack-card";
+      card.dataset.index = i;
+      card.style.backgroundImage = `url('${IMAGES[i]}')`;
+      card.innerHTML = `
+        <div class="slide-content">
+          <div class="slide-eyebrow"><span class="dash"></span>${c.eyebrow}</div>
+          <div class="slide-title">${c.title}</div>
+          <div class="slide-desc">${c.desc}</div>
+          <button class="slide-cta">${c.cta}</button>
+        </div>
+      `;
+      card.addEventListener("click", () => {
+        if(parseInt(card.dataset.index, 10) === currentIndex){
+          goTo(currentIndex + 1);
+          resetAutoplay();
+        }
+      });
+      wrap.appendChild(card);
+    });
+    stage.insertBefore(wrap, stage.querySelector(".stage-controls"));
+    layoutStackCards(null);
+  } else if(currentEngine === "split"){
+    const track = document.createElement("div");
+    track.className = "split-track";
+    track.innerHTML = `
+      <div class="split-half text-side" id="textSide"></div>
+      <div class="split-half image-side" id="imageSide" style="background-image:url('${IMAGES[currentIndex]}')"></div>
+    `;
+    stage.insertBefore(track, stage.querySelector(".progress-track").nextSibling);
+    renderTextSide();
+  } else if(currentEngine === "textreveal"){
+    CONTENT.forEach((c, i) => {
+      const slide = document.createElement("div");
+      slide.className = "slide" + (i === currentIndex ? " is-visible" : "");
+      slide.style.opacity = i === currentIndex ? 1 : 0;
+      slide.dataset.index = i;
+      slide.innerHTML = `
+        <div class="slide-bg" style="background-image:url('${IMAGES[i]}')"></div>
+        <div class="slide-content">
+          <div class="slide-eyebrow"><span class="dash"></span>${c.eyebrow}</div>
+          <div class="slide-title">${wrapWords(c.title)}</div>
+          <div class="slide-desc">${c.desc}</div>
+          <button class="slide-cta">${c.cta}</button>
+        </div>
+      `;
+      stage.appendChild(slide);
+    });
+    stage.insertBefore(stage.querySelector(`.slide[data-index="${currentIndex}"]`), stage.querySelector(".stage-controls"));
+    playTextReveal(currentIndex);
+  } else {
+    CONTENT.forEach((c, i) => {
+      const slide = document.createElement("div");
+      slide.className = "slide" + (i === currentIndex ? " is-visible" : "");
+      slide.style.opacity = i === currentIndex ? 1 : 0;
+      slide.dataset.index = i;
+      const imgSrc = currentEngine === "kenburns" ? KENBURNS_IMAGES[i % KENBURNS_IMAGES.length] : IMAGES[i];
+      const titleMarkup = currentEngine === "kenburns" ? wrapLetters(c.title) : c.title;
+      slide.innerHTML = `
+        <div class="slide-bg" style="background-image:url('${imgSrc}')"></div>
+        <div class="slide-content">
+          <div class="slide-eyebrow"><span class="dash"></span>${c.eyebrow}</div>
+          <div class="slide-title">${titleMarkup}</div>
+          <div class="slide-desc">${c.desc}</div>
+          <button class="slide-cta">${c.cta}</button>
+        </div>
+      `;
+      stage.insertBefore(slide, stage.querySelector(".stage-controls"));
+    });
+    if(currentEngine === "fade" || currentEngine === "kenburns"){
+      const bg = stage.querySelector(`.slide[data-index="${currentIndex}"] .slide-bg`);
+      animateKenBurns(bg);
+    }
+    if(currentEngine === "kenburns"){
+      playTypedTitle(currentIndex);
+    }
+  }
+  buildTrail();
+  renderControls();
+ 
+  playProgress();
+}
+
+function renderTextSide(){
+  const c = CONTENT[currentIndex];
+  const textSide = document.getElementById("textSide");
+  textSide.innerHTML = `
+    <div class="slide-content" style="padding:0;max-width:420px;">
+      <div class="slide-eyebrow"><span class="dash"></span>${c.eyebrow}</div>
+      <div class="slide-title">${c.title}</div>
+      <div class="slide-desc">${c.desc}</div>
+      <button class="slide-cta">${c.cta}</button>
+    </div>
+  `;
+  gsap.fromTo(textSide.querySelector(".slide-content"), {opacity:0, y:12}, {opacity:1, y:0, duration:0.5});
+}
+
+function animateKenBurns(bg){
+  gsap.killTweensOf(bg);
+  gsap.fromTo(bg, { scale: 1, x: 0 }, { scale: 1.15, x: -20, duration: 12, ease: "sine.out" });
+}
+
+function buildAutoRail(activeIndex){
+  return CAR_CONTENT.map((c, i) => `
+    <div class="auto-thumb${i===activeIndex?' active':''}" data-index="${i}" style="background-image:url('${CAR_IMAGES[i % CAR_IMAGES.length]}')">
+      <span class="auto-thumb-label">${c.title}</span>
+    </div>
+  `).join("");
+}
+
+function renderAutoSlide(index){
+  const c = CAR_CONTENT[index];
+  const img = CAR_IMAGES[index % CAR_IMAGES.length];
+  const wrap = document.createElement("div");
+  wrap.className = "auto-slide";
+  wrap.innerHTML = `
+    <div class="slide-bg" id="autoBg" style="background-image:url('${img}')"></div>
+    <div class="auto-layout">
+      <div class="auto-left">
+        <div class="slide-eyebrow"><span class="dash"></span>${c.eyebrow}</div>
+        <div class="auto-spec">${c.spec}</div>
+        <div class="slide-desc">${c.desc}</div>
+        <button class="slide-cta">${c.cta}</button>
+      </div>
+      <div class="auto-center">
+        <div class="auto-title-wrap">
+          <div class="auto-title" id="autoTitle">${c.title}</div>
+        </div>
+      </div>
+      <div class="auto-right" id="autoRail">${buildAutoRail(index)}</div>
+    </div>
+  `;
+  return wrap;
+}
+
+function attachAutoRailEvents(wrap){
+  wrap.querySelectorAll(".auto-thumb").forEach(el => {
+    el.addEventListener("click", () => {
+      goTo(parseInt(el.dataset.index, 10));
+      resetAutoplay();
+    });
+  });
+}
+
+function playAutoReveal(wrap){
+  const bg = wrap.querySelector("#autoBg");
+  const title = wrap.querySelector("#autoTitle");
+  gsap.set(bg, { scale: 1.18 });
+  gsap.set(title, { clipPath: "inset(50% 0% 50% 0%)", scale: 1.04, opacity: 1 });
+  gsap.timeline()
+    .to(bg,    { scale: 1, duration: 1.6, ease: "power2.out" }, 0)
+    .to(title, { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 0.9, ease: "power3.inOut" }, 0.15);
+  gsap.to(bg, { scale: 1.08, duration: 10, delay: 1.6, ease: "sine.inOut" });
+}
+
+const STACK_DEPTH_STYLES = [
+  { x: 0,  y: 0,   rotate: 0,   scale: 1,    opacity: 1,    z: 40, textOpacity: 1 },
+  { x: 34, y: -22, rotate: -5,  scale: 0.94, opacity: 0.95, z: 30, textOpacity: 0 },
+  { x: 60, y: -40, rotate: -9,  scale: 0.88, opacity: 0.85, z: 20, textOpacity: 0 },
+  { x: 82, y: -56, rotate: -13, scale: 0.82, opacity: 0,    z: 10, textOpacity: 0 }
+];
+
+function layoutStackCards(prevIndex){
+  const total = CONTENT.length;
+  const cards = stage.querySelectorAll(".stack-card");
+  cards.forEach(card => {
+    const i = parseInt(card.dataset.index, 10);
+    const depth = (i - currentIndex + total) % total;
+    const s = STACK_DEPTH_STYLES[depth] || STACK_DEPTH_STYLES[STACK_DEPTH_STYLES.length - 1];
+    const textEl = card.querySelector(".slide-content");
+    if(prevIndex !== null && i === prevIndex){
+      gsap.set(textEl, { opacity: 0 });
+      gsap.timeline()
+        .to(card, { x: 620, y: -60, rotate: 20, opacity: 0, zIndex: 50, duration: 0.45, ease: "power2.in" })
+        .set(card, { x: s.x, y: s.y, rotate: s.rotate, scale: s.scale, zIndex: s.z })
+        .to(card, { opacity: s.opacity, duration: 0.4, ease: "power2.out" });
+    } else {
+      gsap.to(card, { x: s.x, y: s.y, rotate: s.rotate, scale: s.scale, opacity: s.opacity, zIndex: s.z, duration: 0.5, ease: "power2.out" });
+      gsap.to(textEl, { opacity: s.textOpacity, duration: 0.35, delay: prevIndex !== null ? 0.3 : 0 });
+    }
+  });
+}
+
+function playTypedTitle(index){
+  const slide = stage.querySelector(`.slide[data-index="${index}"]`);
+  if(!slide) return;
+  const letters = slide.querySelectorAll(".letter");
+  gsap.killTweensOf(letters);
+  gsap.set(letters, { opacity: 0 });
+  gsap.to(letters, { opacity: 1, duration: 0.04, stagger: 0.035, ease: "none" });
+}
+
+function playTextReveal(index){
+  const slide = stage.querySelector(`.slide[data-index="${index}"]`);
+  if(!slide) return;
+  const words = slide.querySelectorAll(".word");
+  gsap.killTweensOf(words);
+  gsap.fromTo(words, { yPercent: 110 }, { yPercent: 0, duration: 0.7, stagger: 0.05, ease: "power3.out" });
+  gsap.fromTo(slide.querySelector(".slide-desc"), {opacity:0, y:10}, {opacity:1, y:0, duration:0.6, delay:0.25});
+  gsap.fromTo(slide.querySelector(".slide-cta"), {opacity:0, y:10}, {opacity:1, y:0, duration:0.6, delay:0.38});
+  animateKenBurns(slide.querySelector(".slide-bg"));
+}
+
+function playProgress(){
+  gsap.killTweensOf(progressFill);
+  gsap.set(progressFill, { scaleX: 0 });
+  gsap.to(progressFill, { scaleX: 1, duration: AUTOPLAY_MS/1000, ease: "none" });
+}
+
+function goTo(index){
+  const prevIndex = currentIndex;
+  currentIndex = (index + CONTENT.length) % CONTENT.length;
+  if(currentIndex === prevIndex){ playProgress(); return; }
+
+  if(currentEngine === "fade"){
+    const slides = stage.querySelectorAll(".slide");
+    const prev = slides[prevIndex], next = slides[currentIndex];
+    next.classList.add("is-visible");
+    gsap.to(prev, { opacity: 0, duration: 0.9 });
+    gsap.to(next, { opacity: 1, duration: 0.9 });
+    animateKenBurns(next.querySelector(".slide-bg"));
+    setTimeout(() => prev.classList.remove("is-visible"), 900);
+  } else if(currentEngine === "kenburns"){
+    const slides = stage.querySelectorAll(".slide");
+    const prev = slides[prevIndex], next = slides[currentIndex];
+    next.classList.add("is-visible");
+    gsap.to(prev, { opacity: 0, duration: 1.1 });
+    gsap.to(next, { opacity: 1, duration: 1.1 });
+    animateKenBurns(next.querySelector(".slide-bg"));
+    playTypedTitle(currentIndex);
+    setTimeout(() => prev.classList.remove("is-visible"), 1100);
+  } else if(currentEngine === "slide"){
+    const slides = stage.querySelectorAll(".slide");
+    slides.forEach((s, i) => {
+      gsap.to(s, { xPercent: (i - currentIndex) * 100, duration: 0.7, ease: "power2.inOut" });
+    });
+  } else if(currentEngine === "split"){
+    const imageSide = document.getElementById("imageSide");
+    const newBg = document.createElement("div");
+    newBg.className = "split-half image-side";
+    newBg.style.backgroundImage = `url('${IMAGES[currentIndex]}')`;
+    newBg.style.position = "absolute";
+    newBg.style.inset = "0";
+    newBg.style.opacity = "0";
+    imageSide.style.position = "relative";
+    imageSide.appendChild(newBg);
+    gsap.to(newBg, { opacity: 1, duration: 0.6, onComplete: () => {
+      imageSide.style.backgroundImage = `url('${IMAGES[currentIndex]}')`;
+      newBg.remove();
+    }});
+    renderTextSide();
+  } else if(currentEngine === "textreveal"){
+    const slides = stage.querySelectorAll(".slide");
+    const prev = slides[prevIndex], next = slides[currentIndex];
+    next.classList.add("is-visible");
+    gsap.to(prev, { opacity: 0, duration: 0.5 });
+    gsap.to(next, { opacity: 1, duration: 0.5 });
+    playTextReveal(currentIndex);
+    setTimeout(() => prev.classList.remove("is-visible"), 500);
+  } else if(currentEngine === "auto"){
+    const old = stage.querySelector(".auto-slide");
+    if(old) old.remove();
+    const wrap = renderAutoSlide(currentIndex);
+    stage.insertBefore(wrap, stage.querySelector(".stage-controls"));
+    attachAutoRailEvents(wrap);
+    playAutoReveal(wrap);
+  } else if(currentEngine === "stack"){
+    layoutStackCards(prevIndex);
+  }
+
+  updateTrail();
+  renderControls();
+  playProgress();
+}
+
+function updateNotes(){
+  const n = ENGINE_NOTES[currentEngine];
+  document.getElementById("notesTitle").textContent = n.title;
+  document.getElementById("notesBody").innerHTML = n.body;
+  document.getElementById("notesSnippet").textContent = n.snippet;
+  document.getElementById("notesTags").innerHTML = n.tags.map(t => `<span class="tag">${t}</span>`).join("");
+}
+
+function resetAutoplay(){
+  clearInterval(autoplayTimer);
+  autoplayTimer = setInterval(() => goTo(currentIndex + 1), AUTOPLAY_MS);
+}
+
+document.getElementById("engineTabs").addEventListener("click", (e) => {
+  const btn = e.target.closest(".engine-tab");
+  if(!btn) return;
+  document.querySelectorAll(".engine-tab").forEach(t => t.classList.remove("active"));
+  btn.classList.add("active");
+  currentEngine = btn.dataset.engine;
+  currentIndex = 0;
+  renderStage();
+  resetAutoplay();
+});
+
+buildTabs();
+renderStage();
+resetAutoplay();
+</script>
+
+</body>
+</html>
