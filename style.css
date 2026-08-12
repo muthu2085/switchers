@@ -1369,9 +1369,9 @@ button {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: 0.96;
+  opacity: 1;
   background:
-    linear-gradient(135deg, rgba(20,22,26,0.94), rgba(20,22,26,0.52)),
+    linear-gradient(135deg, rgba(20,22,26,0.0), rgba(20,22,26,0)),
     var(--service-image);
   background-size: cover;
   background-position: center;
@@ -1382,19 +1382,20 @@ button {
   position: absolute;
   inset: 0;
   z-index: 1;
-  background:
+ /* background:
     radial-gradient(circle at 72% 28%, rgba(64,232,211,0.3), transparent 28%),
-    linear-gradient(0deg, rgba(20,22,26,0.35), transparent 55%);
+    linear-gradient(0deg, rgba(20,22,26,0.35), transparent 55%);*/
 }
 
-.service-image-circuits { --service-image: url('https://muthu2085.github.io/switchers/sliders/background-1.png'); }
-.service-image-pcb { --service-image: url('https://muthu2085.github.io/switchers/sliders/background-02.png'); }
-.service-image-embedded { --service-image: url('https://muthu2085.github.io/switchers/sliders/background-04.png'); }
-.service-image-wireless { --service-image: url('https://muthu2085.github.io/switchers/sliders/background-03.png'); }
-.service-image-sensing { --service-image: url('https://muthu2085.github.io/switchers/sliders/background-1.png'); }
-.service-image-iot { --service-image: url('https://muthu2085.github.io/switchers/sliders/background-02.png'); }
+.service-image-circuits { --service-image: url('img/cirucite-design.png'); }
+.service-image-pcb { --service-image: url('img/pcb-design-layout.png'); }
+.service-image-embedded { --service-image: url('img/embedded-stystem.png'); }
+.service-image-wireless { --service-image: url('img/wireless-design.png'); }
+.service-image-sensing { --service-image: url('img/sensor-integratopm.png'); }
+.service-image-iot { --service-image: url('img/iot-solution.png'); }
 
 .service-image i {
+  display:none;
   position: relative;
   z-index: 3;
   font-size: 62px;
@@ -1405,9 +1406,10 @@ button {
   place-items: center;
   border: 1px solid rgba(64,232,211,0.32);
   border-radius: 50%;
-  background: rgba(20,22,26,0.42);
+ /* background: rgba(20,22,26,0.42);*/
   box-shadow: 0 24px 60px rgba(0,0,0,0.28);
-  backdrop-filter: blur(10px);
+ /* backdrop-filter: blur(10px);*/
+ display:none;
 }
 
 .service-image-caption {
@@ -1751,8 +1753,8 @@ button {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(180deg, rgba(20,22,26,0.1), rgba(20,22,26,0.74)),
-    url('https://muthu2085.github.io/switchers/sliders/background-04.png') center/cover;
+    linear-gradient(180deg, rgba(20,22,26,0), rgba(20,22,26,0)),
+    url('img/electronic-solution.png') center/cover;
   transform: scale(1.02);
 }
 
@@ -1926,6 +1928,60 @@ button {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 12px;
   font-weight: 600;
+}
+
+.solution-path-cta-section {
+  padding: 0 0 92px;
+  background: #fff;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.solution-path-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px;
+  align-items: center;
+  padding: clamp(28px, 4vw, 42px);
+  border: 1px solid rgba(10,124,110,0.16);
+  border-radius: var(--r-sm);
+  background:
+    linear-gradient(135deg, rgba(229,246,243,0.92), rgba(255,255,255,0.96) 58%, rgba(255,189,89,0.12)),
+    #fff;
+  box-shadow: 0 18px 48px rgba(20,22,26,0.08);
+}
+
+.solution-path-cta-copy h2 {
+  max-width: 720px;
+  margin: 14px 0 12px;
+  color: var(--ink);
+  font-size: clamp(28px, 3.2vw, 40px);
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.solution-path-cta-copy p {
+  max-width: 760px;
+  color: var(--body);
+  font-size: 16px;
+}
+
+.solution-path-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.solution-path-secondary {
+  color: var(--ink);
+  border: 1px solid rgba(20,22,26,0.18);
+  background: #fff;
+}
+
+.solution-path-secondary:hover {
+  border-color: rgba(10,124,110,0.32);
+  background: var(--primary-pale);
+  transform: translateY(-2px);
 }
 
 .solution-build-section {
@@ -2158,6 +2214,14 @@ button {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .solution-path-cta {
+    grid-template-columns: 1fr;
+  }
+
+  .solution-path-cta-actions {
+    justify-content: flex-start;
+  }
+
   .solution-results-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2179,6 +2243,10 @@ button {
     padding: 64px 0;
   }
 
+  .solution-path-cta-section {
+    padding: 0 0 64px;
+  }
+
   .solution-page-copy h1 {
     font-size: 42px;
   }
@@ -2189,6 +2257,15 @@ button {
 
   .solution-category-card {
     min-height: auto;
+  }
+
+  .solution-path-cta {
+    padding: 24px;
+  }
+
+  .solution-path-cta-actions {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
   .solution-stack-grid {
@@ -2727,8 +2804,8 @@ button {
   min-height: 260px;
   border-radius: var(--r-sm);
   background:
-    linear-gradient(180deg, rgba(17,19,24,0.05), rgba(17,19,24,0.55)),
-    url('https://muthu2085.github.io/switchers/sliders/background-03.png');
+    linear-gradient(180deg, rgba(17,19,24,0), rgba(17,19,24,0)),
+    url('img/about-us-image.png');
   background-size: cover;
   background-position: center;
 }
@@ -2911,7 +2988,126 @@ button {
 .about-capability-grid article:hover p {
   color: var(--on-dark-mute);
 }
+ /* kicker pill — matches the badge pattern in the screenshot */
+  .kicker{
+    display:inline-flex; align-items:center; gap:9px;
+    font-family:'IBM Plex Mono',monospace; font-size:12.5px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--primary-dark); background:var(--primary-pale); border:1px solid rgba(10,124,110,0.25);
+    padding:8px 16px; border-radius:var(--r-full); margin-bottom:22px;
+  }
+  .kicker::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--primary-dark); }
 
+  /* ===== FOUNDER SECTION ===== */
+  .founder-section{ background:var(--canvas-alt); padding:100px 0; position:relative; overflow:hidden; }
+
+  .founder-grid{
+    display:grid; grid-template-columns:0.85fr 1.15fr; gap:72px; align-items:center;
+    margin-top:8px;
+  }
+
+  /* ---- visual column ---- */
+  .founder-visual{ position:relative; max-width:440px; }
+
+  /* square-dot pattern, tucked behind the top-left corner of the photo */
+  .square-pattern{
+    position:absolute; top:-34px; left:-34px; width:140px; height:140px; z-index:1;
+    display:grid; grid-template-columns:repeat(7,1fr); grid-template-rows:repeat(7,1fr); gap:7px;
+  }
+  .square-pattern span{ width:100%; height:100%; background:var(--primary-dark); border-radius:2px; opacity:0.16; }
+  .square-pattern span:nth-child(3n){ opacity:0.32; }
+  .square-pattern span:nth-child(5n){ opacity:0.08; }
+  .square-pattern span:nth-child(7n+1){ background:var(--primary); opacity:0.45; }
+
+  .founder-photo-frame{
+    position:relative; z-index:2; border-radius:var(--r-lg); overflow:hidden;
+    box-shadow:0 30px 60px rgba(20,22,26,0.18);
+    border:1px solid var(--hairline);
+    
+  }
+  .founder-photo{
+    aspect-ratio:4/5; width:100%; min-height:420px;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(64,232,211,0.35), transparent 55%),
+      linear-gradient(160deg, #1E2126 0%, #14161A 65%);
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .founder-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;       /* fills the frame, crops overflow — use 'contain' to show the whole image with letterboxing instead */
+  object-position:center top;  /* adjust this to reposition the crop */
+} .founder-photo i{ display:none;font-size:120px; color:rgba(245,245,244,0.16); }
+  .founder-photo-caption{
+    position:absolute; left:20px; bottom:20px; z-index:3;
+    font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:0.06em; text-transform:uppercase;
+    color:rgba(255,255,255,0.85); background:rgba(20,22,26,0.55); border:1px solid rgba(255,255,255,0.14);
+    padding:7px 13px; border-radius:var(--r-full); backdrop-filter:blur(6px);
+  }
+
+  /* experience badge, overlapping bottom-right of the photo — same DNA as the hero's floating stat cards */
+  .exp-badge{
+    position:absolute; z-index:4; right:-30px; bottom:-30px;
+    background:var(--surface-dark); color:var(--on-dark);
+    border-radius:var(--r-md); padding:22px 26px;
+    box-shadow:0 20px 40px rgba(20,22,26,0.28);
+    border:1px solid var(--hairline-dark);
+    min-width:168px;
+  }
+  .exp-badge .exp-num{
+    font-family:'IBM Plex Mono',monospace; font-size:34px; font-weight:700; color:var(--primary); line-height:1;
+  }
+  .exp-badge .exp-label{ font-size:12.5px; color:var(--on-dark-mute); margin-top:6px; }
+
+  /* ---- content column ---- */
+  .founder-content .kicker{ margin-bottom:18px; }
+  .founder-name{ font-size:38px; font-weight:800; letter-spacing:-0.01em; margin-bottom:4px; }
+  .founder-title{ font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; color:var(--primary-dark); margin-bottom:26px; }
+
+  .founder-bio p{ color:var(--body); font-size:16px; line-height:1.75; margin-bottom:18px; max-width:560px; }
+
+  .founder-quote{
+    position:relative; margin:28px 0 30px; padding:22px 26px 22px 30px;
+    background:var(--surface-card); border-radius:var(--r-md); border:1px solid var(--hairline);
+    border-left:3px solid var(--primary-dark);
+  }
+  .founder-quote p{
+    font-size:18px; font-weight:600; color:var(--ink); font-style:normal; line-height:1.5; margin:0;
+  }
+  .founder-quote i.q-mark{ position:absolute; top:14px; left:-2px; font-size:13px; color:var(--primary-dark); opacity:0.5; }
+
+  .founder-credentials{ display:flex; flex-wrap:wrap; gap:12px; margin-bottom:32px; }
+  .cred-chip{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13.5px; font-weight:600; color:var(--ink);
+    background:var(--surface-card); border:1px solid var(--hairline); border-radius:var(--r-full);
+    padding:9px 16px;
+  }
+  .cred-chip i{ color:var(--primary-dark); font-size:13px; }
+
+  .founder-actions{ display:flex; align-items:center; gap:26px; flex-wrap:wrap; }
+  .btn-primary{
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--primary-dark); color:#fff; font-size:14.5px; font-weight:600;
+    padding:14px 26px; border-radius:var(--r-sm); border:none; cursor:pointer;
+    transition:background .18s ease, transform .18s ease;
+  }
+  .btn-primary:hover{ background:var(--primary-pressed); transform:translateY(-1px); }
+  .link-ghost{ display:inline-flex; align-items:center; gap:8px; font-size:14.5px; font-weight:600; color:var(--primary-dark); }
+  .link-ghost i{ font-size:12px; transition:transform .2s ease; }
+  .link-ghost:hover i{ transform:translateX(4px); }
+
+  @media (max-width:980px){
+    .founder-grid{ grid-template-columns:1fr; gap:80px; }
+    .founder-visual{ max-width:340px; margin:0 auto 20px; }
+  }
+  @media (max-width:600px){
+    .founder-section{ padding:64px 0; }
+    .wrap{ padding:0 20px; }
+    .founder-name{ font-size:30px; }
+    .exp-badge{ right:-16px; bottom:-20px; padding:16px 20px; min-width:140px; }
+    .exp-badge .exp-num{ font-size:26px; }
+    .square-pattern{ width:100px; height:100px; top:-22px; left:-22px; }
+  }
 @media (max-width: 1040px) {
   .about-page-hero-grid,
   .about-story-grid {
@@ -3815,10 +4011,98 @@ button {
   color: var(--primary);
 }
 
-.brand-cta-proof {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  .floating-contact-actions {
+    position: fixed;
+    right: 20px;
+    bottom: 22px;
+    z-index: 999;
+    display: grid;
+    gap: 10px;
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.28s ease, transform 0.28s ease;
+  }
+
+  .floating-contact-actions.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .floating-contact-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: transparent;
+    color: var(--on-dark);
+    font-size: 18px;
+    text-decoration: none;
+    box-shadow: 0 12px 24px rgba(20,22,26,0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .floating-contact-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 28px rgba(20,22,26,0.18);
+    animation: pulse 1.2s infinite ease;
+  }
+
+  .floating-contact-btn i {
+    display: grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+  }
+
+  .floating-contact-btn.whatsapp:hover {
+    background: rgba(37,211,102,0.15);
+  }
+
+  .floating-contact-btn.phone:hover {
+    background: rgba(10,124,110,0.14);
+  }
+
+  .floating-contact-btn.whatsapp i {
+    color: #25d366;
+  }
+
+  .floating-contact-btn.phone i {
+    color: var(--primary);
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: translateY(-2px) scale(1);
+      box-shadow: 0 18px 28px rgba(20,22,26,0.18);
+    }
+    50% {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 22px 36px rgba(20,22,26,0.2);
+    }
+    100% {
+      transform: translateY(-2px) scale(1);
+      box-shadow: 0 18px 28px rgba(20,22,26,0.18);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .floating-contact-actions {
+      left: 12px;
+      right: 12px;
+      bottom: 16px;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .floating-contact-btn {
+      width: 56px;
+      min-width: 0;
+    }
+  }
+
 }
 
 .brand-proof-card {

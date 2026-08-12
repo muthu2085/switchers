@@ -206,6 +206,21 @@
       </div>
     </section>
 
+    <section class="solution-path-cta-section" aria-label="Quick service call to action">
+      <div class="wrap solution-path-cta reveal-on-scroll">
+        <div class="solution-path-cta-copy">
+          <div class="section-kicker">Next step</div>
+          <h2>Ready to move your embedded product from concept to production?</h2>
+          <p>Talk to our engineering team to scope a discovery sprint, prototype build, or production support engagement that fits your timeline and goals.</p>
+        </div>
+
+        <div class="solution-path-cta-actions">
+          <a class="btn btn-primary" href="contact.html">Book a Consultation <i class="fa-solid fa-arrow-right"></i></a>
+          <a class="btn btn-outline" href="process.html">See the Process</a>
+        </div>
+      </div>
+    </section>
+
     <section class="brand-cta-section" id="contact" aria-label="Switchers services call to action">
       <div class="brand-circuit-pattern" aria-hidden="true"></div>
       <div class="wrap brand-cta-wrap">
@@ -263,6 +278,15 @@
     </div>
   </footer>
 
+  <div class="floating-contact-actions" aria-label="Quick contact actions">
+    <a class="floating-contact-btn whatsapp" href="https://wa.me/19256403478?text=Hello%20Switchers" target="_blank" rel="noopener noreferrer" aria-label="Chat with Switchers on WhatsApp">
+      <i class="fa-brands fa-whatsapp"></i>
+    </a>
+    <a class="floating-contact-btn phone" href="tel:19256403478" aria-label="Call Switchers at (925) 640-3478">
+      <i class="fa-solid fa-phone"></i>
+    </a>
+  </div>
+
   <script>
     const revealItems = [...document.querySelectorAll('.reveal-on-scroll')];
 
@@ -283,6 +307,19 @@
     } else {
       revealItems.forEach((item) => item.classList.add('is-visible'));
     }
+
+    const floatingContactActions = document.querySelector('.floating-contact-actions');
+    const updateFloatingContactVisibility = () => {
+      if (!floatingContactActions) return;
+      if (window.scrollY > 240) {
+        floatingContactActions.classList.add('is-visible');
+      } else {
+        floatingContactActions.classList.remove('is-visible');
+      }
+    };
+
+    updateFloatingContactVisibility();
+    window.addEventListener('scroll', updateFloatingContactVisibility, { passive: true });
   </script>
 </body>
 </html>
