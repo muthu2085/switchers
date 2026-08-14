@@ -711,9 +711,7 @@
     const serviceTabs = [...document.querySelectorAll('.service-tab')];
     const servicePanels = [...document.querySelectorAll('.service-image')];
     const serviceTabList = document.querySelector('.service-tab-list');
-    const serviceDelay = 4800;
     let activeService = 0;
-    let serviceTimer;
 
     function showService(index) {
       if (!serviceTabs.length || !servicePanels.length) {
@@ -735,61 +733,11 @@
       });
     }
 
-    function queueNextService() {
-      clearInterval(serviceTimer);
-      serviceTimer = setInterval(() => showService(activeService + 1), serviceDelay);
-    }
-
     if (serviceTabs.length) {
-      const originalImageStage = document.querySelector('.service-image-stage');
-
-      function isMobileView() {
-        return window.matchMedia('(max-width:760px)').matches;
-      }
-
-      function moveAllPanelsBack() {
-        servicePanels.forEach((p) => {
-          if (originalImageStage && originalImageStage !== p.parentElement) {
-            originalImageStage.appendChild(p);
-            p.classList.remove('open');
-            p.classList.remove('active');
-            p.setAttribute('aria-hidden', 'true');
-          }
-        });
-      }
-
       serviceTabs.forEach((tab) => {
         tab.addEventListener('click', () => {
           const idx = Number(tab.dataset.serviceIndex);
-
-          if (isMobileView()) {
-            // Accordion behavior: move the panel into flow after the tab
-            const panel = servicePanels[idx];
-            const isOpen = panel.classList.contains('open');
-
-            // Close all others
-            serviceTabs.forEach((t, i) => t.classList.remove('expanded'));
-            moveAllPanelsBack();
-
-            if (!isOpen) {
-              tab.classList.add('expanded');
-              // insert panel after the tab button
-              tab.parentNode.insertBefore(panel, tab.nextSibling);
-              panel.classList.add('open');
-              panel.classList.add('active');
-              panel.setAttribute('aria-hidden', 'false');
-            } else {
-              tab.classList.remove('expanded');
-              panel.classList.remove('open');
-              panel.classList.remove('active');
-              panel.setAttribute('aria-hidden', 'true');
-              if (originalImageStage) originalImageStage.appendChild(panel);
-            }
-          } else {
-            // Desktop: regular tab switching
-            showService(idx);
-            queueNextService();
-          }
+          showService(idx);
         });
 
         tab.addEventListener('keydown', (event) => {
@@ -802,7 +750,6 @@
           const nextIndex = (activeService + direction + serviceTabs.length) % serviceTabs.length;
           showService(nextIndex);
           serviceTabs[nextIndex].focus();
-          queueNextService();
         });
       });
 
@@ -813,21 +760,7 @@
         serviceTabList.addEventListener('focusout', () => serviceTabList.classList.remove('is-paused'));
       }
 
-      // Keep panels in the correct container on resize
-      window.addEventListener('resize', () => {
-        if (!isMobileView()) {
-          // move all panels back to the image-stage and restore active state
-          moveAllPanelsBack();
-          showService(activeService);
-        } else {
-          // on mobile, collapse any active panel in the image-stage
-          servicePanels.forEach((p) => p.classList.remove('open'));
-        }
-      });
-
-      // initialize
       showService(0);
-      queueNextService();
     }
 
     const processSteps = [...document.querySelectorAll('.process-step')];
