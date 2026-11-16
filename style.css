@@ -14,7 +14,12 @@
   --on-dark-mute: rgba(245,245,244,0.72);
   --line-dark: rgba(245,245,244,0.14);
   --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
   --r-full: 9999px;
+  --canvas-alt: #F2F5F4;
+  --surface-card: #fff;
+  --hairline-dark: rgba(245,245,244,0.12);
 }
 
 * {
@@ -235,6 +240,7 @@ button {
 .hero-bg {
   position: absolute;
   inset: 0;
+  background-image: var(--bg);
   background-size: cover;
   background-position: center;
   transform: scale(1);
@@ -263,7 +269,7 @@ button {
 .hero-content {
   position: relative;
   z-index: 3;
-  max-width: 760px;
+  max-width: 1000px;
   padding: clamp(38px, 6vw, 78px) clamp(20px, 4vw, 48px) 116px;
 }
 
@@ -305,11 +311,11 @@ button {
   }
 }
 
-.hero-content h1 {
+.hero-content .hero-title {
   font-size: clamp(38px, 5.6vw, 66px);
   line-height: 1.06;
   color: var(--on-dark);
-  max-width: 13ch;
+  max-width: 20ch;
   margin-bottom: 26px;
 }
 
@@ -328,7 +334,7 @@ button {
 }
 
 .hero-content .eyebrow,
-.hero-content h1,
+.hero-content .hero-title,
 .hero-content p,
 .hero-content .hero-actions {
   opacity: 0;
@@ -344,7 +350,7 @@ button {
   transition-delay: 0.2s;
 }
 
-.hero-slide.is-active .hero-content h1 {
+.hero-slide.is-active .hero-content .hero-title {
   opacity: 1;
   transform: translateY(0);
   transition-delay: 0.32s;
@@ -363,7 +369,7 @@ button {
 }
 
 .hero-slide.is-leaving .hero-content .eyebrow,
-.hero-slide.is-leaving .hero-content h1,
+.hero-slide.is-leaving .hero-content .hero-title,
 .hero-slide.is-leaving .hero-content p,
 .hero-slide.is-leaving .hero-content .hero-actions {
   opacity: 0;
@@ -1081,50 +1087,9 @@ button {
 }
 
 @media (max-width: 760px) {
-  .topbar {
-    flex-direction: column;
-    padding: 18px 20px;
-  }
-
-  .topbar-actions,
-  .nav-links {
-    justify-content: flex-start;
-  }
-
-  .social-links {
-    margin: 0;
-  }
-
-  .hero-stage {
-    height: auto;
-    min-height: 680px;
-  }
-
-  .hero-content {
-    padding: 82px 20px 170px;
-  }
-
-  .hero-content h1 {
-    max-width: 11ch;
-  }
-
   .hero-micro {
     right: 20px;
     bottom: 82px;
-  }
-
-  .hero-controls {
-    align-items: flex-end;
-    bottom: 18px;
-  }
-
-  .thumb-nav {
-    width: 76px;
-    height: 50px;
-  }
-
-  .thumb-nav-veil {
-    font-size: 9px;
   }
 
   .trust-strip-inner {
@@ -1160,27 +1125,6 @@ button {
 
   .capability-card {
     min-height: auto;
-  }
-
-  .solution-stack {
-    top: 142px;
-    width: calc(100vw - 40px);
-    height: 460px;
-    min-height: 0;
-  }
-
-  .solution-stack-card {
-    min-height: 0;
-  }
-
-  .solution-card-overlay {
-    width: 100%;
-    padding: 24px;
-  }
-
-  .solution-stack-card h3 {
-    max-width: 11ch;
-    font-size: 30px;
   }
 
   .solution-stack-card.is-next {
@@ -1390,12 +1334,12 @@ button {
   display: none;
 }
 
-.service-tab:nth-child(1) { --service-card-image: url('img/cirucite-design.png'); }
-.service-tab:nth-child(2) { --service-card-image: url('img/pcb-design-layout.png'); }
-.service-tab:nth-child(3) { --service-card-image: url('img/embedded-stystem.png'); }
-.service-tab:nth-child(4) { --service-card-image: url('img/wireless-design.png'); }
-.service-tab:nth-child(5) { --service-card-image: url('img/sensor-integratopm.png'); }
-.service-tab:nth-child(6) { --service-card-image: url('img/iot-solution.png'); }
+.service-tab:nth-child(1) { --service-card-image: url('img/cirucite-design.webp'); }
+.service-tab:nth-child(2) { --service-card-image: url('img/pcb-design-layout.webp'); }
+.service-tab:nth-child(3) { --service-card-image: url('img/embedded-stystem.webp'); }
+.service-tab:nth-child(4) { --service-card-image: url('img/wireless-design.webp'); }
+.service-tab:nth-child(5) { --service-card-image: url('img/sensor-integratopm.webp'); }
+.service-tab:nth-child(6) { --service-card-image: url('img/iot-solution.webp'); }
 
 .service-image {
   position: absolute;
@@ -1438,12 +1382,12 @@ button {
     linear-gradient(0deg, rgba(20,22,26,0.35), transparent 55%);*/
 }
 
-.service-image-circuits { --service-image: url('img/cirucite-design.png'); }
-.service-image-pcb { --service-image: url('img/pcb-design-layout.png'); }
-.service-image-embedded { --service-image: url('img/embedded-stystem.png'); }
-.service-image-wireless { --service-image: url('img/wireless-design.png'); }
-.service-image-sensing { --service-image: url('img/sensor-integratopm.png'); }
-.service-image-iot { --service-image: url('img/iot-solution.png'); }
+.service-image-circuits { --service-image: url('img/cirucite-design.webp'); }
+.service-image-pcb { --service-image: url('img/pcb-design-layout.webp'); }
+.service-image-embedded { --service-image: url('img/embedded-stystem.webp'); }
+.service-image-wireless { --service-image: url('img/wireless-design.webp'); }
+.service-image-sensing { --service-image: url('img/sensor-integratopm.webp'); }
+.service-image-iot { --service-image: url('img/iot-solution.webp'); }
 
 .service-image i {
   display:none;
@@ -1663,7 +1607,7 @@ button {
   border-radius: var(--r-sm);
   background:
     linear-gradient(135deg, rgba(20,22,26,0.96), rgba(20,22,26,0.84)),
-    url('https://muthu2085.github.io/switchers/sliders/background-04.png');
+    url('img/background-04.webp');
   background-size: cover;
   background-position: center;
   color: var(--on-dark);
@@ -1817,7 +1761,7 @@ button {
   inset: 0;
   background:
     linear-gradient(180deg, rgba(20,22,26,0), rgba(20,22,26,0)),
-    url('img/electronic-solution.png') center/cover;
+    url('img/electronic-solution.webp') center/cover;
   transform: scale(1.02);
 }
 
@@ -1933,6 +1877,7 @@ button {
 
 .solution-category-media {
   min-height: 240px;
+  background-image: var(--bg);
   background-position: center;
   background-size: cover;
   position: relative;
@@ -2811,7 +2756,7 @@ button {
   color: var(--on-dark);
   background:
     linear-gradient(90deg, rgba(17,19,24,0.94), rgba(17,19,24,0.55)),
-    url('https://muthu2085.github.io/switchers/sliders/background-02.png');
+    url('img/background-02.webp');
   background-size: cover;
   background-position: center;
 }
@@ -2868,7 +2813,7 @@ button {
   border-radius: var(--r-sm);
   background:
     linear-gradient(180deg, rgba(17,19,24,0), rgba(17,19,24,0)),
-    url('img/about-us-image.png');
+    url('img/about-us-image.webp');
   background-size: cover;
   background-position: center;
 }
@@ -3061,7 +3006,7 @@ button {
   .kicker::before{ content:''; width:6px; height:6px; border-radius:50%; background:var(--primary-dark); }
 
   /* ===== FOUNDER SECTION ===== */
-  .founder-section{ background:var(--canvas-alt); padding:100px 0; position:relative; overflow:hidden; }
+  .founder-section{ background:var(--canvas-alt); padding:96px 0; position:relative; overflow:hidden; border-bottom:1px solid var(--hairline); }
 
   .founder-grid{
     display:grid; grid-template-columns:0.85fr 1.15fr; gap:72px; align-items:center;
@@ -3122,21 +3067,24 @@ button {
   .exp-badge .exp-label{ font-size:12.5px; color:var(--on-dark-mute); margin-top:6px; }
 
   /* ---- content column ---- */
+  /* one shared right edge for bio, quote and chips */
+  .founder-content{ max-width:600px; }
   .founder-content .kicker{ margin-bottom:18px; }
-  .founder-name{ font-size:38px; font-weight:800; letter-spacing:-0.01em; margin-bottom:4px; }
+  .founder-name{ font-size:40px; font-weight:700; line-height:1.1; letter-spacing:-0.01em; margin-bottom:8px; }
   .founder-title{ font-family:'IBM Plex Mono',monospace; font-size:14px; font-weight:600; color:var(--primary-dark); margin-bottom:26px; }
 
-  .founder-bio p{ color:var(--body); font-size:16px; line-height:1.75; margin-bottom:18px; max-width:560px; }
+  .founder-bio p{ color:var(--body); font-size:16px; line-height:1.75; margin-bottom:18px; }
 
   .founder-quote{
-    position:relative; margin:28px 0 30px; padding:22px 26px 22px 30px;
+    position:relative; margin:28px 0 30px; padding:22px 26px 22px 58px;
     background:var(--surface-card); border-radius:var(--r-md); border:1px solid var(--hairline);
     border-left:3px solid var(--primary-dark);
+    box-shadow:0 14px 34px rgba(20,22,26,0.06);
   }
   .founder-quote p{
     font-size:18px; font-weight:600; color:var(--ink); font-style:normal; line-height:1.5; margin:0;
   }
-  .founder-quote i.q-mark{ position:absolute; top:14px; left:-2px; font-size:13px; color:var(--primary-dark); opacity:0.5; }
+  .founder-quote i.q-mark{ position:absolute; top:24px; left:22px; font-size:20px; color:var(--primary-dark); opacity:0.55; }
 
   .founder-credentials{ display:flex; flex-wrap:wrap; gap:12px; margin-bottom:32px; }
   .cred-chip{
@@ -3162,10 +3110,10 @@ button {
   @media (max-width:980px){
     .founder-grid{ grid-template-columns:1fr; gap:80px; }
     .founder-visual{ max-width:340px; margin:0 auto 20px; }
+    .founder-content{ margin:0 auto; }
   }
   @media (max-width:600px){
     .founder-section{ padding:64px 0; }
-    .wrap{ padding:0 20px; }
     .founder-name{ font-size:30px; }
     .exp-badge{ right:-16px; bottom:-20px; padding:16px 20px; min-width:140px; }
     .exp-badge .exp-num{ font-size:26px; }
@@ -4154,15 +4102,14 @@ button {
 
   @media (max-width: 720px) {
     .floating-contact-actions {
-      left: 12px;
-      right: 12px;
+      right: 16px;
       bottom: 16px;
-      grid-template-columns: 1fr 1fr;
     }
 
     .floating-contact-btn {
-      width: 56px;
-      min-width: 0;
+      width: 50px;
+      height: 50px;
+      background: #fff;
     }
   }
 
@@ -4232,7 +4179,6 @@ button {
   align-items: stretch;
 }
 
-
 .brand-proof-card {
   min-height: 140px;
   display: flex;
@@ -4272,49 +4218,749 @@ button {
     rgba(255,255,255,0.04);
 }
 
-.brand-proof-value {
+.brand-proof-card .brand-proof-value {
   color: var(--primary);
-.brand-proof-card > div { display:flex; flex-direction:column; gap:6px; }
-
-.brand-proof-card .brand-proof-label {
-  color: var(--on-dark);
-  font-weight: 700;
-  line-height: 1.1;
-  font-size: 16px;
 }
 
+/* ============================================
+   RESPONSIVE — HEADER / HAMBURGER NAVIGATION
+   ============================================ */
 
-.brand-proof-card {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 16px;
-  min-height: 84px;
+@media (min-width: 981px) {
+  .menu-toggle {
+    display: none;
+  }
 }
 
-.brand-proof-label {
-  max-width: 11ch;
-  color: var(--on-dark);
-  font-size: 18px;
+@media (max-width: 980px) {
+  .topbar {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 20px;
+  }
+
+  .brand img {
+    display: block;
+    width: 118px;
+    height: auto;
+  }
+
+  .menu-toggle {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    flex: 0 0 44px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    border: 1px solid rgba(10,124,110,0.22);
+    border-radius: var(--r-sm);
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .menu-toggle span {
+    width: 19px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .menu-open .menu-toggle span:first-child {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .menu-open .menu-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu-open .menu-toggle span:last-child {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .topbar-actions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: none;
+    width: 100%;
+    max-width: none;
+    max-height: calc(100vh - 72px);
+    overflow-y: auto;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 6px 20px 20px;
+    border-top: 1px solid rgba(24,26,29,0.08);
+    border-bottom: 1px solid rgba(10,124,110,0.18);
+    background: #fff;
+    box-shadow: 0 16px 28px rgba(20,22,26,0.12);
+  }
+
+  .menu-open .topbar-actions {
+    display: flex;
+  }
+
+  .topbar-actions .nav-links {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    width: 100%;
+    margin: 0;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+  }
+
+  .topbar-actions .nav-links a {
+    padding: 13px 0;
+    border-bottom: 1px solid rgba(24,26,29,0.08);
+  }
+
+  .topbar-actions .nav-links a[aria-current="page"] {
+    color: var(--primary-dark);
+  }
+
+  .topbar-actions .header-cta {
+    display: flex;
+    justify-content: center;
+    padding: 13px 16px;
+  }
 }
+
+/* ============================================
+   RESPONSIVE — BRAND CTA (section before footer)
+   ============================================ */
 
 @media (max-width: 960px) {
   .brand-cta-wrap {
     grid-template-columns: 1fr;
+    gap: 36px;
   }
-  .brand-cta-proof { grid-template-columns: repeat(2, 1fr); }
 }
 
-@media (max-width: 640px) {
-  .brand-cta-section {
-    padding: 72px 0;
+@media (max-width: 760px) {
+  .brand-cta-copy h2 {
+    margin: 16px 0;
   }
 
+  .brand-cta-copy p {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  .brand-cta-actions {
+    margin-top: 24px;
+  }
+
+  .brand-cta-proof {
+    gap: 12px;
+  }
+
+  .brand-proof-card,
+  .brand-proof-main {
+    min-height: 112px;
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .brand-proof-card i {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-proof-card span {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 360px) {
   .brand-cta-proof {
     grid-template-columns: 1fr;
   }
 
+  .brand-proof-card,
   .brand-proof-main {
+    min-height: 0;
+  }
+}
+
+/* ============================================
+   RESPONSIVE — SHARED MOBILE RHYTHM
+   One gutter (20px, 16px under 480px), one
+   section padding (64px) and one type scale
+   for every page.
+   ============================================ */
+
+@media (max-width: 760px) {
+  /* section spacing */
+  .about-section,
+  .solutions-section,
+  .services-section,
+  .process-section,
+  .technology-section,
+  .brand-cta-section,
+  .about-page-hero,
+  .about-story-section,
+  .about-capabilities-section,
+  .founder-section,
+  .contact-page-hero,
+  .contact-options-section,
+  .contact-inquiry-section,
+  .contact-fit-section,
+  .service-page-hero,
+  .service-intent-section,
+  .service-detail-section,
+  .service-deliverables-section,
+  .service-engagement-section,
+  .solution-page-hero,
+  .solution-intro-section,
+  .solution-category-section,
+  .solution-build-section,
+  .solution-results-section,
+  .solution-stack-section,
+  .process-page-hero,
+  .process-intent-section,
+  .process-flow-section,
+  .process-checkpoint-section,
+  .process-collab-section {
+    padding: 64px 0;
+  }
+
+  .solution-path-cta-section {
+    padding: 0 0 64px;
+  }
+
+  .about-proof-section {
+    padding: 40px 0;
+  }
+
+  /* headings */
+  .hero-content .hero-title,
+  .about-page-copy h1,
+  .contact-page-copy h1,
+  .service-page-copy h1,
+  .solution-page-copy h1,
+  .process-page-copy h1 {
+    font-size: clamp(32px, 9vw, 44px);
+    line-height: 1.06;
+    overflow-wrap: break-word;
+  }
+
+  .section-title-row h2,
+  .about-heading h2,
+  .about-story-copy h2,
+  .solution-intro-copy h2,
+  .solution-build-copy h2,
+  .solution-path-cta-copy h2,
+  .process-intent-copy h2,
+  .process-checkpoint-copy h2,
+  .service-intent-copy h2,
+  .service-deliverables-copy h2,
+  .contact-inquiry-copy h2,
+  .brand-cta-copy h2 {
+    font-size: clamp(27px, 7.4vw, 36px);
+    line-height: 1.1;
+  }
+
+  .section-head {
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .section-title-row {
+    gap: 14px;
+  }
+
+  .solutions-section .section-head {
+    margin-bottom: 28px;
+  }
+
+  /* body copy */
+  .section-title-row p,
+  .about-story-copy p,
+  .solution-intro-copy p,
+  .solution-build-copy p,
+  .solution-path-cta-copy p,
+  .process-intent-copy p,
+  .process-checkpoint-copy p,
+  .service-intent-copy p,
+  .service-deliverables-copy p,
+  .contact-inquiry-copy p,
+  .about-page-copy p,
+  .contact-page-copy p,
+  .service-page-copy p,
+  .solution-page-copy p,
+  .process-page-copy p {
+    font-size: 16px;
+  }
+
+  .solution-build-row p,
+  .process-checkpoint-row p,
+  .deliverable-row p,
+  .inquiry-row p {
+    font-size: 15.5px;
+  }
+
+  .solution-build-row,
+  .process-checkpoint-row,
+  .deliverable-row {
+    padding: 18px 0;
+  }
+
+  /* page hero blocks */
+  .about-page-copy h1,
+  .contact-page-copy h1,
+  .service-page-copy h1,
+  .solution-page-copy h1,
+  .process-page-copy h1 {
+    margin: 16px 0 18px;
+  }
+
+  .hero-actions {
+    gap: 12px;
+    margin-top: 26px;
+  }
+
+  .hero-actions .btn,
+  .brand-cta-actions .btn {
+    flex: 1 1 auto;
+    min-height: 46px;
+  }
+
+  .eyebrow {
+    margin-bottom: 18px;
+    font-size: 11px;
+  }
+
+  .about-hero-panel,
+  .contact-hero-panel,
+  .service-hero-panel,
+  .process-hero-panel {
+    min-height: 0;
+    padding: 22px;
+  }
+
+  .about-hero-panel {
+    padding: 14px;
+  }
+
+  .about-hero-image {
     min-height: 220px;
+    background-image: url('img/about-us-image-sm.webp');
+  }
+
+  .about-hero-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-hero-stats article {
+    padding: 14px;
+  }
+
+  .about-hero-stats span {
+    font-size: 28px;
+  }
+
+  .about-hero-stats small {
+    font-size: 13px;
+  }
+
+  .service-hero-metric span {
+    font-size: 64px;
+  }
+
+  .solution-hero-visual {
+    min-height: 280px;
+  }
+
+  .solution-hero-overlay {
+    inset: auto 14px 14px;
+    gap: 8px;
+  }
+
+  .solution-hero-overlay span {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  /* cards: drop desktop min-heights so mobile cards hug their content */
+  .proof-card,
+  .technology-panel,
+  .about-proof-page-card,
+  .about-capability-grid article,
+  .contact-option-card,
+  .contact-fit-grid article,
+  .service-detail-card,
+  .engagement-card,
+  .solution-result-card,
+  .solution-stack-grid article,
+  .process-collab-grid article {
+    min-height: 0;
+    padding: 22px;
+  }
+
+  .about-capability-grid i,
+  .contact-option-card i,
+  .contact-fit-grid i,
+  .service-detail-card i,
+  .engagement-card i,
+  .solution-result-card i,
+  .solution-stack-grid i,
+  .process-collab-grid i {
+    margin-bottom: 22px;
+  }
+
+  .service-detail-index,
+  .solution-result-index {
+    top: 22px;
+    right: 22px;
+    font-size: 24px;
+  }
+
+  .about-capability-grid h3,
+  .contact-option-card h3,
+  .contact-fit-grid h3,
+  .service-detail-card h3,
+  .engagement-card h3,
+  .solution-result-card h3,
+  .solution-stack-grid h3,
+  .process-collab-grid h3,
+  .solution-category-body h3 {
+    font-size: 20px;
+  }
+
+  .about-proof-page-card span {
+    font-size: 40px;
+  }
+
+  .about-proof-page-card h3 {
+    margin: 24px 0 8px;
+    font-size: 21px;
+  }
+
+  .proof-value {
+    font-size: 30px;
+  }
+
+  /* home: hero slider */
+  .hero-shell {
+    min-height: 0;
+  }
+
+  .hero-stage {
+    height: auto;
+    min-height: max(560px, calc(100svh - 72px));
+  }
+
+  .hero-content {
+    max-width: 100%;
+    padding: 48px 20px 104px;
+  }
+
+  .hero-content .hero-title {
+    max-width: none;
+    margin-bottom: 18px;
+  }
+
+  .hero-content p {
+    margin-bottom: 0;
+    font-size: 16px;
+  }
+
+  .hero-bg {
+    background-image: var(--bg-sm, var(--bg));
+  }
+
+  .hero-bg::after {
+    background: linear-gradient(180deg, rgba(20,22,26,0.42) 0%, rgba(20,22,26,0.8) 48%, rgba(20,22,26,0.95) 100%);
+  }
+
+  .hero-controls {
+    right: 20px;
+    bottom: 22px;
+  }
+
+  .thumb-nav {
+    width: 72px;
+    height: 44px;
+  }
+
+  .thumb-nav-veil {
+    font-size: 9px;
+  }
+
+  /* home: industry solution stack */
+  .solution-stack-shell {
+    gap: 16px;
+  }
+
+  /* controls scroll with the page on mobile; only the card stack stays pinned,
+     so the controls can never sit on top of a card title */
+  .solution-stack-controls {
+    position: relative;
+    top: auto;
+    padding: 8px;
+  }
+
+  .solution-nav {
+    width: 40px;
+    height: 40px;
+  }
+
+  .solution-stack {
+    top: 16px;
+    width: 100%;
+    height: clamp(400px, calc(100svh - 32px), 460px);
+  }
+
+  .solution-stack-card {
+    background:
+      linear-gradient(180deg, rgba(9,13,18,0.18) 0%, rgba(9,13,18,0.7) 45%, rgba(9,13,18,0.92) 100%),
+      var(--solution-image-sm, var(--solution-image));
+    background-size: cover;
+    background-position: center;
+  }
+
+  .solution-card-overlay {
+    width: 100%;
+    padding: 22px;
+  }
+
+  .solution-stack-card .solution-icon {
+    margin-bottom: 16px;
+  }
+
+  .solution-stack-card h3 {
+    max-width: 14ch;
+    font-size: 26px;
+  }
+
+  .solution-stack-card p {
+    margin-bottom: 18px;
+    font-size: 15px;
+  }
+
+  /* home: services tabs */
+  .service-tab {
+    min-height: 220px;
+  }
+
+  .service-tab:nth-child(1) { --service-card-image: url('img/cirucite-design-sm.webp'); }
+  .service-tab:nth-child(2) { --service-card-image: url('img/pcb-design-layout-sm.webp'); }
+  .service-tab:nth-child(3) { --service-card-image: url('img/embedded-stystem-sm.webp'); }
+  .service-tab:nth-child(4) { --service-card-image: url('img/wireless-design-sm.webp'); }
+  .service-tab:nth-child(5) { --service-card-image: url('img/sensor-integratopm-sm.webp'); }
+  .service-tab:nth-child(6) { --service-card-image: url('img/iot-solution-sm.webp'); }
+
+  /* home: technology */
+  .technology-panel {
+    background:
+      linear-gradient(135deg, rgba(20,22,26,0.96), rgba(20,22,26,0.84)),
+      url('img/background-04-sm.webp');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .technology-panel-icon {
+    margin-bottom: 36px;
+  }
+
+  .technology-panel h3 {
+    font-size: 26px;
+  }
+
+  .technology-chip-cloud {
+    gap: 10px;
+  }
+
+  .technology-chip-cloud span {
+    min-height: 60px;
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  /* solutions page */
+  .solution-hero-image {
+    background: url('img/electronic-solution-sm.webp') center/cover;
+  }
+
+  .solution-intro-proof {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .solution-intro-proof article {
+    padding: 18px;
+  }
+
+  .solution-intro-proof span {
+    font-size: 30px;
+  }
+
+  .solution-category-card {
+    grid-template-rows: 200px auto;
+  }
+
+  .solution-category-media {
+    min-height: 200px;
+    background-image: var(--bg-sm, var(--bg));
+  }
+
+  .solution-category-body {
+    padding: 22px;
+  }
+
+  .solution-category-body i {
+    margin-bottom: 18px;
+  }
+
+  .solution-path-cta {
+    gap: 22px;
+    padding: 24px 22px;
+  }
+
+  /* process page */
+  .process-flow-card {
+    gap: 16px;
+    padding: 22px;
+  }
+
+  .process-flow-index {
+    top: 22px;
+    right: 22px;
+    font-size: 24px;
+  }
+
+  .process-flow-copy h3 {
+    font-size: 21px;
+  }
+
+  .process-intent-list span,
+  .service-intent-points span {
+    font-size: 15px;
+  }
+
+  /* about page */
+  .about-page-hero {
+    background:
+      linear-gradient(180deg, rgba(17,19,24,0.9), rgba(17,19,24,0.72)),
+      url('img/background-02-sm.webp');
+    background-size: cover;
+    background-position: center;
+  }
+
+  .founder-grid {
+    gap: 56px;
+  }
+
+  .founder-visual {
+    width: calc(100% - 24px);
+  }
+
+  .exp-badge {
+    right: -12px;
+  }
+
+  .founder-photo-caption {
+    top: 14px;
+    bottom: auto;
+    left: 14px;
+  }
+
+  .founder-quote {
+    padding: 18px 20px 18px 48px;
+  }
+
+  .founder-quote i.q-mark {
+    top: 20px;
+    left: 18px;
+    font-size: 17px;
+  }
+
+  .founder-quote p {
+    font-size: 16px;
+  }
+
+  .founder-bio p {
+    font-size: 15.5px;
+  }
+
+  /* contact page */
+  .contact-hero-list span {
+    align-items: flex-start;
+    font-size: 15px;
+  }
+
+  .contact-hero-list i {
+    margin-top: 4px;
+  }
+
+  /* footer */
+  .site-footer {
+    padding: 32px 0;
+  }
+
+  .footer-wrap {
+    gap: 18px;
+  }
+
+  .footer-links {
+    gap: 10px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .wrap {
+    width: min(100% - 32px, 1180px);
+  }
+
+  .topbar {
+    padding: 12px 16px;
+  }
+
+  .topbar-actions {
+    padding: 4px 16px 18px;
+  }
+
+  .hero-content {
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .hero-controls {
+    right: 16px;
+  }
+
+  .hero-content p,
+  .about-page-copy p,
+  .contact-page-copy p,
+  .service-page-copy p,
+  .solution-page-copy p,
+  .process-page-copy p {
+    font-size: 15px;
+  }
+
+  .contact-inquiry-panel {
+    padding: 20px;
+  }
+
+  .contact-inquiry-panel .btn {
+    width: 100%;
+  }
+
+  .solution-stack-card h3 {
+    font-size: 24px;
   }
 }
